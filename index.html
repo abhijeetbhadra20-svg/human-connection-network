@@ -130,6 +130,8 @@
       background: #171923;
       color: white;
       cursor: pointer;
+      text-decoration: none;
+      text-align: center;
     }
 
     .button:active {
@@ -161,6 +163,7 @@
   <div class="container">
 
     <section class="hero">
+
       <div class="dna">🧬</div>
 
       <h1>How Connected Are We?</h1>
@@ -169,6 +172,7 @@
         One person. One relative. One growing human network.
         Explore how far a chain of real family connections can reach.
       </p>
+
     </section>
 
 
@@ -207,16 +211,23 @@
       </p>
 
       <div class="chain">
+
         <span class="person">You</span>
+
         <span class="arrow">→</span>
+
         <span class="person">Relative</span>
+
         <span class="arrow">→</span>
+
         <span class="person">?</span>
+
       </div>
 
-      <button class="button" onclick="joinExperiment()">
+
+      <a class="button" href="join.html">
         Join the Network
-      </button>
+      </a>
 
     </section>
 
@@ -235,23 +246,14 @@
 
 
     <div class="footer">
+
       Human Connection Network<br>
+
       A community experiment — not a scientific proof.
+
     </div>
 
   </div>
-
-
-  <script>
-
-    function joinExperiment() {
-      alert(
-        "🚀 The network is ready to grow!\n\n" +
-        "The real joining system will be added next."
-      );
-    }
-
-  </script>
 
 </body>
 </html>
