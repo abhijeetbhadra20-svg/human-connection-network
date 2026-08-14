@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Human Connection</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f8fc;
+      color: #171923;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      padding: 25px 18px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 55px 10px 35px;
+    }
+
+    .dna {
+      font-size: 52px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 38px;
+      line-height: 1.1;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #606575;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 25px 0;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 18px;
+      padding: 20px 12px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    .number {
+      font-size: 27px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .label {
+      font-size: 13px;
+      color: #747987;
+    }
+
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 25px 20px;
+      margin-top: 18px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    .card h2 {
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #626776;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .chain {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .person {
+      background: #eef0ff;
+      padding: 10px 13px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .arrow {
+      color: #888;
+      font-weight: bold;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 15px;
+      padding: 16px;
+      margin-top: 22px;
+      font-size: 16px;
+      font-weight: bold;
+      background: #171923;
+      color: white;
+      cursor: pointer;
+    }
+
+    .button:active {
+      transform: scale(0.98);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 30px 10px;
+      color: #858997;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 450px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .hero {
+        padding-top: 35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <section class="hero">
+      <div class="dna">🧬</div>
+
+      <h1>How Connected Are We?</h1>
+
+      <p class="subtitle">
+        One person. One relative. One growing human network.
+        Explore how far a chain of real family connections can reach.
+      </p>
+    </section>
+
+
+    <section class="stats">
+
+      <div class="stat">
+        <div class="number">1</div>
+        <div class="label">People Connected</div>
+      </div>
+
+      <div class="stat">
+        <div class="number">1</div>
+        <div class="label">Current Depth</div>
+      </div>
+
+      <div class="stat">
+        <div class="number">1</div>
+        <div class="label">Active Branch</div>
+      </div>
+
+      <div class="stat">
+        <div class="number">0</div>
+        <div class="label">Milestones</div>
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>🌱 The experiment</h2>
+
+      <p>
+        Start with yourself and invite a relative.
+        They invite one of their relatives, and the chain continues.
+      </p>
+
+      <div class="chain">
+        <span class="person">You</span>
+        <span class="arrow">→</span>
+        <span class="person">Relative</span>
+        <span class="arrow">→</span>
+        <span class="person">?</span>
+      </div>
+
+      <button class="button" onclick="joinExperiment()">
+        Join the Network
+      </button>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>🌍 The goal</h2>
+
+      <p>
+        This is a social experiment exploring how people can
+        trace and connect their family relationships through
+        a growing network.
+      </p>
+
+    </section>
+
+
+    <div class="footer">
+      Human Connection Network<br>
+      A community experiment — not a scientific proof.
+    </div>
+
+  </div>
+
+
+  <script>
+
+    function joinExperiment() {
+      alert(
+        "🚀 The network is ready to grow!\n\n" +
+        "The real joining system will be added next."
+      );
+    }
+
+  </script>
+
+</body>
+</html>
