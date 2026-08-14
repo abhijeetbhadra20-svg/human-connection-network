@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Join the Network</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f8fc;
+      color: #171923;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding: 25px 18px;
+    }
+
+    .top {
+      text-align: center;
+      padding: 35px 10px 20px;
+    }
+
+    .icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: #656a78;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .card {
+      background: white;
+      margin-top: 20px;
+      padding: 25px 20px;
+      border-radius: 22px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #dddfe7;
+      border-radius: 13px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #555;
+    }
+
+    .info {
+      background: #f1f3f9;
+      padding: 15px;
+      border-radius: 14px;
+      margin-top: 18px;
+      font-size: 13px;
+      color: #666b78;
+      line-height: 1.5;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 15px;
+      padding: 16px;
+      margin-top: 20px;
+      background: #171923;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .node {
+      text-align: center;
+      background: #eef0ff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 15px;
+    }
+
+    .node-id {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .link-box {
+      margin-top: 18px;
+      padding: 12px;
+      background: #f5f5f7;
+      border-radius: 12px;
+      font-size: 12px;
+      word-break: break-all;
+      color: #555;
+    }
+
+    .copy {
+      background: #444756;
+      margin-top: 10px;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .success {
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <section class="top">
+      <div class="icon">🧬</div>
+
+      <h1>Join the Network</h1>
+
+      <p class="subtitle">
+        Add yourself to the growing human connection experiment.
+      </p>
+    </section>
+
+
+    <section class="card">
+
+      <label for="nickname">
+        Choose a nickname
+      </label>
+
+      <input
+        id="nickname"
+        type="text"
+        maxlength="20"
+        placeholder="Example: Abhi"
+      >
+
+      <div class="info">
+        🔐 Demo privacy:
+        Your real name is not required.
+        This prototype uses a nickname and creates an anonymous Node ID.
+      </div>
+
+      <button onclick="joinNetwork()">
+        Create My Node
+      </button>
+
+
+      <div class="result" id="result">
+
+        <div class="success">
+          🎉 Your node has been created!
+        </div>
+
+        <div class="node">
+
+          <div>Your Anonymous Node ID</div>
+
+          <div class="node-id" id="nodeId">
+            NODE-0000
+          </div>
+
+        </div>
+
+
+        <div class="link-box" id="inviteLink">
+          Your invite link will appear here.
+        </div>
+
+        <button class="copy" onclick="copyLink()">
+          📋 Copy Invite Link
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <a class="back" href="index.html">
+      ← Back to Home
+    </a>
+
+  </div>
+
+
+  <script>
+
+    function generateNodeId() {
+
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+      let id = "NODE-";
+
+      for (let i = 0; i < 4; i++) {
+        id += chars.charAt(
+          Math.floor(Math.random() * chars.length)
+        );
+      }
+
+      return id;
+    }
+
+
+    function joinNetwork() {
+
+      const nickname =
+        document.getElementById("nickname").value.trim();
+
+      if (!nickname) {
+
+        alert("Please choose a nickname first.");
+
+        return;
+      }
+
+
+      const nodeId = generateNodeId();
+
+
+      const baseUrl =
+        window.location.origin +
+        window.location.pathname.replace("join.html", "");
+
+
+      const inviteLink =
+        baseUrl + "join.html?ref=" + nodeId;
+
+
+      document.getElementById("nodeId").textContent =
+        nodeId;
+
+      document.getElementById("inviteLink").textContent =
+        inviteLink;
+
+      document.getElementById("result").style.display =
+        "block";
+
+      localStorage.setItem("nickname", nickname);
+
+      localStorage.setItem("nodeId", nodeId);
+
+      localStorage.setItem("inviteLink", inviteLink);
+
+    }
+
+
+    function copyLink() {
+
+      const link =
+        document.getElementById("inviteLink").textContent;
+
+      navigator.clipboard.writeText(link);
+
+      alert("✅ Invite link copied!");
+
+    }
+
+  </script>
+
+</body>
+</html>
