@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Join the Network</title>
 
   <style>
@@ -72,20 +71,6 @@
       outline: none;
     }
 
-    input:focus {
-      border-color: #555;
-    }
-
-    .info {
-      background: #f1f3f9;
-      padding: 15px;
-      border-radius: 14px;
-      margin-top: 18px;
-      font-size: 13px;
-      color: #666b78;
-      line-height: 1.5;
-    }
-
     button {
       width: 100%;
       border: none;
@@ -99,13 +84,26 @@
       cursor: pointer;
     }
 
-    button:active {
-      transform: scale(0.98);
+    .info {
+      background: #f1f3f9;
+      padding: 15px;
+      border-radius: 14px;
+      margin-top: 18px;
+      font-size: 13px;
+      color: #666b78;
+      line-height: 1.5;
     }
 
     .result {
       display: none;
       margin-top: 20px;
+    }
+
+    .success {
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #555;
     }
 
     .node {
@@ -135,7 +133,6 @@
 
     .copy {
       background: #444756;
-      margin-top: 10px;
     }
 
     .back {
@@ -147,11 +144,15 @@
       font-size: 14px;
     }
 
-    .success {
-      text-align: center;
-      font-size: 15px;
-      line-height: 1.6;
-      color: #555;
+    .error {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff0f0;
+      color: #b00020;
+      font-size: 14px;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -170,7 +171,6 @@
       </p>
     </section>
 
-
     <section class="card">
 
       <label for="nickname">
@@ -185,15 +185,17 @@
       >
 
       <div class="info">
-        🔐 Demo privacy:
+        🔐 Privacy:
         Your real name is not required.
-        This prototype uses a nickname and creates an anonymous Node ID.
+        This prototype stores only your chosen nickname,
+        anonymous Node ID, and optional parent Node ID.
       </div>
 
-      <button onclick="joinNetwork()">
+      <button id="joinButton" onclick="joinNetwork()">
         Create My Node
       </button>
 
+      <div class="error" id="errorBox"></div>
 
       <div class="result" id="result">
 
@@ -206,11 +208,10 @@
           <div>Your Anonymous Node ID</div>
 
           <div class="node-id" id="nodeId">
-            NODE-0000
+            NODE-XXXX
           </div>
 
         </div>
-
 
         <div class="link-box" id="inviteLink">
           Your invite link will appear here.
@@ -224,7 +225,6 @@
 
     </section>
 
-
     <a class="back" href="index.html">
       ← Back to Home
     </a>
@@ -232,75 +232,215 @@
   </div>
 
 
+  <!-- Supabase library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+
+    // ==========================================
+    // SUPABASE CONFIG
+    // ==========================================
+
+    const SUPABASE_URL =
+      "https://ytxuzcvfgxieuchmfzxt.supabase.co";
+
+    // PASTE YOUR SUPABASE PUBLISHABLE KEY BELOW
+    const SUPABASE_KEY =
+      "sb_publishable_fq7ZgQ0bBCjqEzKPEIttpg_DVhZyTR8";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    // ==========================================
+    // GENERATE ANONYMOUS NODE ID
+    // ==========================================
 
     function generateNodeId() {
 
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-      let id = "NODE-";
+      let code = "NODE-";
 
-      for (let i = 0; i < 4; i++) {
-        id += chars.charAt(
+      for (let i = 0; i < 6; i++) {
+
+        code += chars.charAt(
           Math.floor(Math.random() * chars.length)
         );
+
       }
 
-      return id;
+      return code;
     }
 
 
-    function joinNetwork() {
+    // ==========================================
+    // GET PARENT NODE FROM INVITE LINK
+    // ==========================================
+
+    function getParentNode() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      return params.get("ref") || null;
+    }
+
+
+    // ==========================================
+    // CREATE NODE
+    // ==========================================
+
+    async function joinNetwork() {
 
       const nickname =
-        document.getElementById("nickname").value.trim();
+        document
+          .getElementById("nickname")
+          .value
+          .trim();
+
+      const errorBox =
+        document.getElementById("errorBox");
+
+      const button =
+        document.getElementById("joinButton");
+
+      errorBox.style.display = "none";
 
       if (!nickname) {
 
-        alert("Please choose a nickname first.");
+        errorBox.textContent =
+          "Please choose a nickname first.";
+
+        errorBox.style.display = "block";
 
         return;
       }
 
 
-      const nodeId = generateNodeId();
+      button.disabled = true;
+
+      button.textContent =
+        "Creating Node...";
 
 
-      const baseUrl =
-        window.location.origin +
-        window.location.pathname.replace("join.html", "");
+      try {
+
+        const parentNodeCode =
+          getParentNode();
+
+        const nodeCode =
+          generateNodeId();
 
 
-      const inviteLink =
-        baseUrl + "join.html?ref=" + nodeId;
+        const { data, error } =
+          await supabaseClient
+            .from("nodes")
+            .insert([
+              {
+                node_code: nodeCode,
+                nickname: nickname,
+                parent_node_code:
+                  parentNodeCode
+              }
+            ])
+            .select()
+            .single();
 
 
-      document.getElementById("nodeId").textContent =
-        nodeId;
+        if (error) {
 
-      document.getElementById("inviteLink").textContent =
-        inviteLink;
+          throw error;
 
-      document.getElementById("result").style.display =
-        "block";
+        }
 
-      localStorage.setItem("nickname", nickname);
 
-      localStorage.setItem("nodeId", nodeId);
+        const inviteLink =
+          window.location.origin +
+          window.location.pathname +
+          "?ref=" +
+          encodeURIComponent(nodeCode);
 
-      localStorage.setItem("inviteLink", inviteLink);
+
+        document
+          .getElementById("nodeId")
+          .textContent =
+          data.node_code;
+
+
+        document
+          .getElementById("inviteLink")
+          .textContent =
+          inviteLink;
+
+
+        document
+          .getElementById("result")
+          .style.display =
+          "block";
+
+
+        document
+          .getElementById("nickname")
+          .disabled =
+          true;
+
+
+        button.style.display =
+          "none";
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        errorBox.textContent =
+          "Could not create your node. " +
+          (error.message || "Please try again.");
+
+        errorBox.style.display =
+          "block";
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "Create My Node";
+
+      }
 
     }
 
 
-    function copyLink() {
+    // ==========================================
+    // COPY INVITE LINK
+    // ==========================================
+
+    async function copyLink() {
 
       const link =
-        document.getElementById("inviteLink").textContent;
+        document
+          .getElementById("inviteLink")
+          .textContent;
 
-      navigator.clipboard.writeText(link);
+      try {
 
-      alert("✅ Invite link copied!");
+        await navigator.clipboard.writeText(link);
+
+        alert("✅ Invite link copied!");
+
+      } catch {
+
+        alert("Copy failed. Please copy the link manually.");
+
+      }
 
     }
 
